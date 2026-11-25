@@ -95,6 +95,14 @@ enum InvoiceStatus {
   OVERDUE
 }
 
+enum QuotationStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  EXPIRED
+  CONVERTED
+}
+
 enum PaymentMethod {
   CASH
   UPI
@@ -114,6 +122,7 @@ model Business {
   eInvoiceApplicable         Boolean                     @default(false) @map("e_invoice_applicable")
   inventoryEnabled           Boolean                     @default(false) @map("inventory_enabled")
   invoiceSequence            Int                         @default(0) @map("invoice_sequence")
+  quotationSequence          Int                         @default(0) @map("quotation_sequence")
   timezone                   String                      @default("Asia/Kolkata")
   gstin                      String?
   stateCode                  String?                     @map("state_code")
@@ -135,6 +144,7 @@ model Business {
   messages                   Message[]
   conversationNotes          ConversationNote[]
   quotations                 Quotation[]
+  quotationTemplates         QuotationTemplate[]
   invoices                   Invoice[]
   payments                   Payment[]
   whatsappCampaigns          WhatsAppCampaign[]
@@ -462,24 +472,47 @@ model ConversationNote {
 }
 
 model Quotation {
+  id          String          @id @default(uuid()) @db.Uuid
+  businessId  String          @map("business_id") @db.Uuid
+  business    Business        @relation(fields: [businessId], references: [id], onDelete: Restrict)
+  contactId   String          @map("contact_id") @db.Uuid
+  contact     Contact         @relation(fields: [contactId], references: [id], onDelete: Restrict)
+  dealId      String?         @map("deal_id") @db.Uuid
+  deal        Deal?           @relation(fields: [dealId], references: [id], onDelete: Restrict)
+  lineItems   Json            @map("line_items")
+  quoteNumber Int             @default(0) @map("quote_number")
+  status      QuotationStatus @default(DRAFT)
+  expiresAt   DateTime?       @map("expires_at")
+  notes       String?         @db.Text
+  subtotal    Decimal         @default(0) @db.Decimal(14, 2)
+  taxTotal    Decimal         @default(0) @map("tax_total") @db.Decimal(14, 2)
+  grandTotal  Decimal         @default(0) @map("grand_total") @db.Decimal(14, 2)
+  createdById String          @map("created_by") @db.Uuid
+  createdBy   User            @relation("QuotationCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+  deletedAt   DateTime?       @map("deleted_at")
+
+  @@unique([businessId, quoteNumber])
+  @@index([businessId])
+  @@index([businessId, dealId, createdAt])
+  @@index([businessId, contactId])
+  @@map("quotations")
+}
+
+model QuotationTemplate {
   id          String    @id @default(uuid()) @db.Uuid
   businessId  String    @map("business_id") @db.Uuid
   business    Business  @relation(fields: [businessId], references: [id], onDelete: Restrict)
-  contactId   String    @map("contact_id") @db.Uuid
-  contact     Contact   @relation(fields: [contactId], references: [id], onDelete: Restrict)
-  dealId      String?   @map("deal_id") @db.Uuid
-  deal        Deal?     @relation(fields: [dealId], references: [id], onDelete: Restrict)
-  lineItems   Json      @map("line_items")
-  createdById String    @map("created_by") @db.Uuid
-  createdBy   User      @relation("QuotationCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  name        String
+  htmlContent String    @map("html_content") @db.Text
+  isDefault   Boolean   @default(false) @map("is_default")
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
   deletedAt   DateTime? @map("deleted_at")
 
   @@index([businessId])
-  @@index([businessId, dealId, createdAt])
-  @@index([businessId, contactId])
-  @@map("quotations")
+  @@map("quotation_templates")
 }
 
 model Invoice {
@@ -561,10 +594,13 @@ model InventoryItem {
   business       Business        @relation(fields: [businessId], references: [id], onDelete: Restrict)
   sku            String
   name           String
+  description    String?
   unit           String          @default("piece")
   quantityOnHand Decimal         @default(0) @map("quantity_on_hand") @db.Decimal(14, 3)
   reorderLevel   Decimal         @default(0) @map("reorder_level") @db.Decimal(14, 3)
   sellingPrice   Decimal         @default(0) @map("selling_price") @db.Decimal(14, 2)
+  hsnSacCode     String?         @map("hsn_sac_code")
+  taxPercent     Decimal         @default(18) @map("tax_percent") @db.Decimal(5, 2)
   active         Boolean         @default(true)
   createdAt      DateTime        @default(now()) @map("created_at")
   updatedAt      DateTime        @updatedAt @map("updated_at")
