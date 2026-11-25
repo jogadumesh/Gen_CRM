@@ -4,6 +4,7 @@ import type { AuthResponse, UserRole } from "@msme-crm/shared-types";
 import {
   ContactRound,
   FileSearch,
+  FileText,
   Gauge,
   ListChecks,
   Loader2,
@@ -11,6 +12,7 @@ import {
   Mail,
   Menu,
   Megaphone,
+  Package,
   PanelsTopLeft,
   ReceiptIndianRupee,
   ShieldCheck,
@@ -42,6 +44,8 @@ const navigation = [
   { key: "contacts",   icon: ContactRound,         href: "/contacts",  roles: ["OWNER", "STAFF"] },
   { key: "broadcasts", icon: Megaphone,            href: "/broadcasts",roles: ["OWNER"] },
   { key: "pipeline",   icon: PanelsTopLeft,        href: "/pipeline",  roles: ["OWNER", "STAFF"] },
+  { key: "quotations", icon: FileText,             href: "/quotations",roles: ["OWNER", "ACCOUNTANT", "STAFF"] },
+  { key: "products",   icon: Package,              href: "/products",  roles: ["OWNER", "ACCOUNTANT"] },
   { key: "today",      icon: ListChecks,           href: "/today",     roles: ["OWNER", "STAFF"] },
   { key: "billing",    icon: ReceiptIndianRupee,   href: "/invoices",  roles: ["OWNER", "ACCOUNTANT"] },
   { key: "audit",      icon: ShieldCheck,          href: "/audit",     roles: ["OWNER"] },
@@ -110,9 +114,13 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           ? t("tasks")
           : pathname.startsWith("/invoices")
             ? t("billingInvoices")
-            : pathname.startsWith("/audit")
-              ? t("auditActivity")
-              : t("overview");
+            : pathname.startsWith("/quotations")
+              ? t("quotations")
+              : pathname.startsWith("/products")
+                ? t("products")
+                : pathname.startsWith("/audit")
+                  ? t("auditActivity")
+                  : t("overview");
 
   return (
     <div className="min-h-dvh bg-slate-50 lg:pl-64">

@@ -583,3 +583,82 @@ export interface LeadSourceMetric {
 }
 
 export type DashboardDigestFrequency = "daily" | "weekly";
+
+// ---- Products ----
+export interface ProductSummary {
+  id: string;
+  sku: string;
+  name: string;
+  description: string | null;
+  unit: string;
+  sellingPrice: number;
+  hsnSacCode: string | null;
+  taxPercent: number;
+  active: boolean;
+}
+
+export interface ProductInput {
+  sku: string;
+  name: string;
+  description?: string | null;
+  unit?: string;
+  sellingPrice?: number;
+  hsnSacCode?: string | null;
+  taxPercent?: number;
+  active?: boolean;
+}
+
+// ---- Quotations ----
+export const QUOTATION_STATUSES = ["draft", "sent", "accepted", "expired", "converted"] as const;
+export type QuotationStatus = (typeof QUOTATION_STATUSES)[number];
+
+export interface QuotationSummary {
+  id: string;
+  quoteNumber: number;
+  status: QuotationStatus;
+  contact: Pick<ContactSummary, "id" | "name" | "phone" | "email">;
+  deal: Pick<DealSummary, "id" | "title"> | null;
+  subtotal: number;
+  taxTotal: number;
+  grandTotal: number;
+  expiresAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface QuotationDetail extends QuotationSummary {
+  lineItems: InvoiceLineItem[];
+  notes: string | null;
+  createdBy: { id: string; name: string };
+}
+
+export interface QuotationInput {
+  contactId: string;
+  dealId?: string | null;
+  lineItems: InvoiceLineItem[];
+  expiresAt?: string | null;
+  notes?: string | null;
+}
+
+export interface QuotationListResponse {
+  items: QuotationSummary[];
+  total: number;
+}
+
+export interface QuotationOptionsResponse {
+  contacts: Array<{ id: string; name: string; phone: string }>;
+  deals: Array<{ id: string; title: string; contactId: string }>;
+  products: ProductSummary[];
+}
+
+export interface QuotationConvertResponse {
+  invoiceId: string;
+}
+
+export interface QuotationTemplateSummary {
+  id: string;
+  name: string;
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

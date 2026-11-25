@@ -23,7 +23,9 @@
     "salesPipeline": "बिक्री पाइपलाइन",
     "tasks": "कार्य और फॉलो-अप",
     "billingInvoices": "बिलिंग और चालान",
-    "auditActivity": "ऑडिट गतिविधि"
+    "auditActivity": "ऑडिट गतिविधि",
+    "quotations": "कोटेशन",
+    "products": "उत्पाद"
   },
   "Language": {
     "label": "भाषा",
@@ -34,7 +36,7 @@
     "email": "ईमेल",
     "password": "पासवर्ड",
     "signIn": "साइन इन",
-    "newAccount": "SahayakCRM पर नए हैं?",
+    "newAccount": "Mini CRM पर नए हैं?",
     "createAccount": "खाता बनाएँ"
   },
   "Inbox": {
@@ -66,5 +68,49 @@
     "action": "कार्रवाई",
     "entity": "रिकॉर्ड",
     "time": "समय"
+  },
+  "Quotations": {
+    "title": "कोटेशन",
+    "subtitle": "ग्राहकों के लिए कोटेशन बनाएं और प्रबंधित करें।",
+    "new": "नया कोटेशन",
+    "quoteNumber": "कोट #",
+    "status": "स्थिति",
+    "contact": "ग्राहक",
+    "deal": "सौदा",
+    "total": "कुल",
+    "expiresAt": "समाप्ति",
+    "notes": "नोट्स",
+    "lineItems": "लाइन आइटम",
+    "addLine": "लाइन जोड़ें",
+    "draft": "मसौदा",
+    "sent": "भेजा गया",
+    "accepted": "स्वीकृत",
+    "expired": "समाप्त",
+    "converted": "परिवर्तित",
+    "send": "भेजा गया चिह्नित करें",
+    "accept": "स्वीकृत चिह्नित करें",
+    "convertToInvoice": "चालान में बदलें",
+    "empty": "अभी कोई कोटेशन नहीं।",
+    "saved": "कोटेशन सहेजा गया",
+    "sendConfirm": "इस कोटेशन को भेजा गया चिह्नित करें?",
+    "acceptConfirm": "इस कोटेशन को स्वीकृत चिह्नित करें?",
+    "convertConfirm": "इस कोटेशन को मसौदा चालान में बदलें?"
+  },
+  "Products": {
+    "title": "उत्पाद सूची",
+    "subtitle": "कोटेशन और चालान के लिए पुनः उपयोगी उत्पाद और सेवाएं प्रबंधित करें।",
+    "new": "उत्पाद जोड़ें",
+    "sku": "SKU",
+    "name": "नाम",
+    "description": "विवरण",
+    "unit": "इकाई",
+    "price": "मूल्य (₹)",
+    "hsn": "HSN/SAC कोड",
+    "tax": "कर %",
+    "active": "सक्रिय",
+    "empty": "अभी कोई उत्पाद नहीं।",
+    "saved": "उत्पाद सहेजा गया",
+    "deactivate": "निष्क्रिय करें",
+    "deactivateConfirm": "इस उत्पाद को निष्क्रिय करें?"
   }
 }
